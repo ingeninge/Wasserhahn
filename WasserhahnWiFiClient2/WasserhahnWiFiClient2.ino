@@ -9,6 +9,12 @@ Pin Name  Function  used_as
 04  IO12  GPIO12    Output_Open Schaltet das Relay zum Öffnen ein
 05  IO13  GPIO13    Output_Close Schaltet das Relay zum Schließen ein
 
+If you are testing on a NodeMCU Dev-Board: 
+D1 = GPIO5
+D2 = GPIO4
+D6 = GPIO12
+D7 = GPIO13
+
 Usage:  mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Status // returns a JSON-String: {"Close":0,"Open":1}
         mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Close
         mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Open
@@ -41,6 +47,7 @@ const char* server = "192.168.2.78";
 const uint16_t port = 1883;
 // change this to the mqtt topic you want to use:
 char* topic = "wasserhahn2/set";
+String clientName="wasserhahn2";
 char message_buff[100];
 String payload = "";
 
@@ -148,7 +155,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 }
 
-
 WiFiClient wifiClient;
 PubSubClient client(server, 1883, callback, wifiClient);
 
@@ -189,17 +195,18 @@ String macToStr(const uint8_t* mac)
 }
 
 boolean reconnect() {
-  String clientName="Wasserhahn2";
+  String clientName = String(topic);
   uint8_t mac[6];
   WiFi.macAddress(mac);
+  //clientName += topic;
   clientName += macToStr(mac);
   clientName += "-";
   clientName += String(micros() & 0xff, 16);
   if (client.connect((char*) clientName.c_str())) {
     // Once connected, publish an announcement...
-    client.publish("wasserhahn2/set","reconnect");
+    client.publish(topic,"reconnect");
     // ... and resubscribe
-    client.subscribe("wasserhahn2/set");
+    client.subscribe(topic);
   }
   return client.connected();
 }
@@ -216,8 +223,7 @@ void setup() {
 
   // We start by connecting to a WiFi network
   #ifdef DEBUGSERIAL
-  //Serial.println();
-  //Serial.println();
+  Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
   #endif
@@ -241,7 +247,7 @@ void setup() {
   Serial.println(WiFi.localIP());
   Serial.println("Connecting to MQTT Broker");
   #endif
-  String clientName="Wasserhahn2";
+  //String clientName="Wasserhahn2";
   uint8_t mac[6];
   WiFi.macAddress(mac);
   clientName += macToStr(mac);
@@ -284,7 +290,7 @@ void setup() {
     Serial.print("Sending payload: ");
     Serial.println(payload);
     #endif
-    if (client.subscribe("wasserhahn/set")) {
+    if (client.subscribe(topic)) {
       #ifdef DEBUGSERIAL
       Serial.println("Subscripe OK");
       #endif
@@ -296,10 +302,6 @@ void setup() {
     }
   }
 } //end void setup()
-
-
-
-
 
 void loop() {
   if (!client.connected()) {
@@ -314,12 +316,11 @@ void loop() {
         #endif
       }
     }
-  } else {
-    // Client connected
-
-   //static int counter = 0;
-  client.loop();
-  //++counter;
-  delay(50);
+  } 
+  else 
+  {
+   // Client connected
+   client.loop();
+   delay(50);
   }
 }
