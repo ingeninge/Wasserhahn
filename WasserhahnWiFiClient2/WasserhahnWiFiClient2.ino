@@ -20,10 +20,13 @@ Usage:  mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Status // retu
 #define OUTPUT_CLOSE 13
 
 #define DEBUGSERIAL
+
+// Put your credentials for your WiFi either in a file called credentials.h in your project folder or below
 #ifdef DEBUGSERIAL
   #include "credentials.h"
 #endif
 
+// WiFi Settings
 #ifndef STASSID
 //#define STASSID "YourSSID"
 //#define STAPSK  "YourSecretKey"
@@ -31,27 +34,23 @@ Usage:  mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Status // retu
 const char* ssid     = STASSID;
 const char* password = STAPSK;
 
-// change this to the mqtt topic you want to use:
-char* topic = "wasserhahn2/set";
 
+// MQTT Broker Settings
 //char* server = "your.mqtt.broker.ip";
 const char* server = "192.168.2.78";
-char message_buff[100];
-//const char* host = "your.mqtt.broker.ip";
-//const char* host = "192.168.2.78";
-
 const uint16_t port = 1883;
+// change this to the mqtt topic you want to use:
+char* topic = "wasserhahn2/set";
+char message_buff[100];
 String payload = "";
 
 // Der Motorkugelhahn hat 2 galvanisch getrennte kontakte. Einer schließt bei vollständig geschlossenem Kugelhahn,
 // der zweite schließt bei vollständig geöffneten Kugelhahn. Dazwischen sind beide Kontakte offen.
+// The ball valve has 2 isolated contacts. Only one contact at a time is closed. In transient phase both are open.
 
 int status=0; //Status des Kugelhahns: 0=offen/open, 1=zu/closed, 2=weder noch (beide Kontakte offen)/both contacts open
 
 long lastReconnectAttempt = 0;
-
-
-
 
 void Open() {
   if(!(digitalRead(INPUT_OPEN))) {
