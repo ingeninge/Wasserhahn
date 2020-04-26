@@ -1,5 +1,6 @@
-#include <PubSubClient.h>
+
 #include <ESP8266WiFi.h>
+#include <PubSubClient.h>
 
 /* Used ESP8266 WROOM-02 module from Pollin.de
 Pin Name  Function  used_as
@@ -8,10 +9,9 @@ Pin Name  Function  used_as
 04  IO12  GPIO12    Output_Open Schaltet das Relay zum Öffnen ein
 05  IO13  GPIO13    Output_Close Schaltet das Relay zum Schließen ein
 
-Usage:  mosquitto_pub -h 192.168.2.78 -t wasserhahn/set -m Status // returns a JSON-String: {"Close":0,"Open":1}
-        mosquitto_pub -h 192.168.2.78 -t wasserhahn/set -m Close
-        mosquitto_pub -h 192.168.2.78 -t wasserhahn/set -m Open
-
+Usage:  mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Status // returns a JSON-String: {"Close":0,"Open":1}
+        mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Close
+        mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Open
 */
 
 #define INPUT_CLOSE 4
@@ -19,44 +19,68 @@ Usage:  mosquitto_pub -h 192.168.2.78 -t wasserhahn/set -m Status // returns a J
 #define OUTPUT_OPEN 12
 #define OUTPUT_CLOSE 13
 
+#define DEBUGSERIAL
+#ifdef DEBUGSERIAL
+  #include "credentials.h"
+#endif
+
 #ifndef STASSID
-#define STASSID "YourSSID"
-#define STAPSK  "YourSecretKey"
+//#define STASSID "YourSSID"
+//#define STAPSK  "YourSecretKey"
 #endif
 const char* ssid     = STASSID;
 const char* password = STAPSK;
 
-char* topic = "wasserhahn/set";
-char* server = "192.168.2.78";
-char message_buff[100];
+// change this to the mqtt topic you want to use:
+char* topic = "wasserhahn2/set";
 
-const char* host = "192.168.2.78";
+//char* server = "your.mqtt.broker.ip";
+const char* server = "192.168.2.78";
+char message_buff[100];
+//const char* host = "your.mqtt.broker.ip";
+//const char* host = "192.168.2.78";
+
 const uint16_t port = 1883;
 String payload = "";
+
 // Der Motorkugelhahn hat 2 galvanisch getrennte kontakte. Einer schließt bei vollständig geschlossenem Kugelhahn,
-// der zweite schließt bei vollständig geöffneten Kugelhahn. Dazwischen sind beide Kontakte offen
-int status=0; //Status des Kugelhahns: 0=offen, 1=zu, 2=weder noch (beide Kontakte offen)
+// der zweite schließt bei vollständig geöffneten Kugelhahn. Dazwischen sind beide Kontakte offen.
+
+int status=0; //Status des Kugelhahns: 0=offen/open, 1=zu/closed, 2=weder noch (beide Kontakte offen)/both contacts open
+
 long lastReconnectAttempt = 0;
+
+
+
 
 void Open() {
   if(!(digitalRead(INPUT_OPEN))) {
+    #ifdef DEBUGSERIAL
     Serial.println("Wasserhahn ist bereits auf");
+    //Serial.println("Valve is already open");
+    #endif
     delay(100);
     Status();
     delay(100);
     exit;
   }
   else
-  {
+  { 
+    #ifdef DEBUGSERIAL
     Serial.println("Öffne Wasserhahn");
+    //Serial.println("Opening valve");
+    #endif
     while (digitalRead(INPUT_OPEN)) { 
       delay(100);
       digitalWrite(OUTPUT_OPEN, 1);
-      //max 90sek
+      //needs max 90s
       delay(100);
     }
    }
+    #ifdef DEBUGSERIAL
     Serial.println("Wasserhahn voll geöffnet");
+    //Serial.println("Opening completed");
+    #endif
     delay(2000);
     digitalWrite(OUTPUT_OPEN, 0);
     delay(100);
@@ -66,7 +90,10 @@ void Open() {
 
 void Close() {
   if(!(digitalRead(INPUT_CLOSE))) {
+    #ifdef DEBUGSERIAL
     Serial.println("Wasserhahn ist bereits zu");
+    //Serial.println("Valve is already closed");
+    #endif
     delay(100);
     Status();
     delay(100);
@@ -74,7 +101,10 @@ void Close() {
   }
   else
   {
+    #ifdef DEBUGSERIAL
     Serial.println("Schließe Wasserhahn");
+    //Serial.println("Closeing valve");
+    #endif
     while (digitalRead(INPUT_CLOSE)) { 
       delay(100);
       digitalWrite(OUTPUT_CLOSE, 1);
@@ -82,7 +112,10 @@ void Close() {
       delay(100);
     }
    }
+    #ifdef DEBUGSERIAL
     Serial.println("Wasserhahn voll geschlossen");
+    //Serial.println("Closeing completed");
+    #endif
     delay(2000);
     digitalWrite(OUTPUT_CLOSE, 0);
     delay(100);
@@ -91,10 +124,12 @@ void Close() {
 }
 
 void callback(char* topic, byte* payload, unsigned int length) {
-  // handle message arrived
+  // Rückrufroutine für MQTT Nachrichten / handle message arrived
   int i = 0;
+  #ifdef DEBUGSERIAL
   Serial.println("Message arrived:  topic: " + String(topic));
   Serial.println("Length: " + String(length,DEC));
+  #endif
   // create character buffer with ending null terminator (string)
   for(i=0; i<length; i++) {
     message_buff[i] = payload[i];
@@ -102,7 +137,9 @@ void callback(char* topic, byte* payload, unsigned int length) {
   message_buff[i] = '\0';
   
   String msgString = String(message_buff);
+  #ifdef DEBUGSERIAL
   Serial.println("Payload: " + msgString);
+  #endif
   if (msgString.equals("Open")) {
     Open();
   } else if (msgString.equals("Close")) {
@@ -113,6 +150,33 @@ void callback(char* topic, byte* payload, unsigned int length) {
 }
 
 
+WiFiClient wifiClient;
+PubSubClient client(server, 1883, callback, wifiClient);
+
+void Status() {
+  //create a JSON string
+  payload = "{\"Close\":";
+  payload += digitalRead(INPUT_CLOSE);
+  payload += ",\"Open\":";
+  payload += digitalRead(INPUT_OPEN);
+  payload += "}";
+  #ifdef DEBUGSERIAL
+  Serial.println("Status: " + payload);
+  #endif
+  if (client.publish(topic, (char*) payload.c_str())) {
+      #ifdef DEBUGSERIAL
+      Serial.println("Publish ok");
+      #endif
+    }
+    else {
+      #ifdef DEBUGSERIAL
+      Serial.println("Publish failed Status()" +payload);
+      #endif
+    }
+    #ifdef DEBUGSERIAL
+    Serial.println("Ende Status()");
+    #endif
+}
 
 String macToStr(const uint8_t* mac)
 {
@@ -125,27 +189,39 @@ String macToStr(const uint8_t* mac)
   return result;
 }
 
-WiFiClient wifiClient;
-PubSubClient client(host, 1883, callback, wifiClient);
+boolean reconnect() {
+  String clientName="Wasserhahn2";
+  uint8_t mac[6];
+  WiFi.macAddress(mac);
+  clientName += macToStr(mac);
+  clientName += "-";
+  clientName += String(micros() & 0xff, 16);
+  if (client.connect((char*) clientName.c_str())) {
+    // Once connected, publish an announcement...
+    client.publish("wasserhahn2/set","reconnect");
+    // ... and resubscribe
+    client.subscribe("wasserhahn2/set");
+  }
+  return client.connected();
+}
 
 void setup() {
-  //pinMode(pin,mode);
   pinMode(OUTPUT_CLOSE,OUTPUT);
   pinMode(OUTPUT_OPEN,OUTPUT);
   pinMode(INPUT_CLOSE,INPUT);
   pinMode(INPUT_OPEN,INPUT);
   digitalWrite(12,0);
-  digitalWrite(13,0); //beide Relais aus
+  digitalWrite(13,0); //both relais to off / beide Relais aus
   
   Serial.begin(115200);
 
   // We start by connecting to a WiFi network
-
+  #ifdef DEBUGSERIAL
   //Serial.println();
   //Serial.println();
   Serial.print("Connecting to ");
   Serial.println(ssid);
-
+  #endif
   /* Explicitly set the ESP8266 to be a WiFi-client, otherwise, it by default,
      would try to act as both a client and an access-point and could cause
      network-issues with your other WiFi-devices on your WiFi-network. */
@@ -154,87 +230,77 @@ void setup() {
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
+    #ifdef DEBUGSERIAL
     Serial.print(".");
+    #endif
   }
 
+  #ifdef DEBUGSERIAL
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
   Serial.println("Connecting to MQTT Broker");
-  /*String clientName="Wasserhahn";
+  #endif
+  String clientName="Wasserhahn2";
   uint8_t mac[6];
   WiFi.macAddress(mac);
   clientName += macToStr(mac);
   clientName += "-";
   clientName += String(micros() & 0xff, 16);
-
+  #ifdef DEBUGSERIAL
   Serial.print("Connecting to ");
   Serial.print(server);
   Serial.print(" as ");
   Serial.println(clientName);
-    if (client.connect((char*) clientName.c_str())) {*/
-    if (reconnect()) {
+  #endif
+  //if (client.connect((char*) clientName.c_str())) {
+
+  if (reconnect()) {
+      #ifdef DEBUGSERIAL
       Serial.println("Connected to MQTT broker");
       Serial.print("Topic is: ");
       Serial.println(topic);
-    
+      #endif
       if (client.publish(topic, "hello from ESP8266")) {
+        #ifdef DEBUGSERIAL
         Serial.println("Publish ok");
+        #endif
       }
       else {
+        #ifdef DEBUGSERIAL
         Serial.println("Publish failed");
+        #endif
       }
-    }
-    else {
+  }
+  else {
+      #ifdef DEBUGSERIAL
       Serial.println("MQTT connect failed");
       Serial.println("Will reset and try again...");
+      #endif
       abort();
-    }
+  }
   if (client.connected()){
+    #ifdef DEBUGSERIAL
     Serial.print("Sending payload: ");
     Serial.println(payload);
+    #endif
     if (client.subscribe("wasserhahn/set")) {
+      #ifdef DEBUGSERIAL
       Serial.println("Subscripe OK");
+      #endif
     }
     else {
+      #ifdef DEBUGSERIAL
       Serial.println("Subscription failed");
+      #endif
     }
   }
-}
+} //end void setup()
 
-void Status() {
-  //create a JSON string
-  payload = "{\"Close\":";
-  payload += digitalRead(INPUT_CLOSE);
-  payload += ",\"Open\":";
-  payload += digitalRead(INPUT_OPEN);
-  payload += "}";
-  Serial.println("Status: " + payload);
-  if (client.publish(topic, (char*) payload.c_str())) {
-      Serial.println("Publish ok");
-    }
-    else {
-      Serial.println("Publish failed Status()" +payload);
-    }
-    Serial.println("Ende Status()");
-}
 
-boolean reconnect() {
-  String clientName="Wasserhahn";
-  uint8_t mac[6];
-  WiFi.macAddress(mac);
-  clientName += macToStr(mac);
-  clientName += "-";
-  clientName += String(micros() & 0xff, 16);
-  if (client.connect((char*) clientName.c_str())) {
-    // Once connected, publish an announcement...
-    client.publish("wasserhahn/set","reconnect");
-    // ... and resubscribe
-    client.subscribe("wasserhahn/set");
-  }
-  return client.connected();
-}
+
+
 
 void loop() {
   if (!client.connected()) {
@@ -244,7 +310,9 @@ void loop() {
       // Attempt to reconnect
       if (reconnect()) {
         lastReconnectAttempt = 0;
+        #ifdef DEBUGSERIAL
         Serial.println("reconnected");
+        #endif
       }
     }
   } else {
@@ -255,4 +323,4 @@ void loop() {
   //++counter;
   delay(50);
   }
-  }
+}
