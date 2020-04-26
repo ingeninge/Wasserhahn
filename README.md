@@ -1,6 +1,7 @@
 # Wasserhahn
 MQTT controlled Motor Bulb Valve ESP8266 Arduino
 ![Image of the motor driver](https://github.com/ingeninge/Wasserhahn/blob/master/images/20190403_160802.jpg)
+Manufactor is END. Here is a link to the Datasheet: https://shop.end.de/armaturen/antriebe-und-zubehoer/elektrische-antriebe/ne034100-elektrischer-schwenkantrieb-30nm-230v-ac
 
 Since my water tap in the garden was leaking and the repair would have included ripping down the building bricks, I asked a friend to build in a ball valve. On this I could mount a motor to open and close the garden water tap.
 
