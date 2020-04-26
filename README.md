@@ -10,3 +10,5 @@ To controll the motor I use a ESP8266-12 and two relais. The ESP uses 2 Inputs a
 The Outputs are controlling two relais. One for openeing and one for closing the valve. The outputs are held active for 90 seconds.
 
 MQTT-protocol ist used to control the garden water tap remotely. 
+
+Todo: update mill and drill files, mill, solder and test the layout. Release to public
