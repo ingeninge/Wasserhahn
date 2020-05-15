@@ -13,4 +13,4 @@ MQTT-protocol ist used to control the garden water tap remotely.
 
 First idea was to let it work with an Arduino Sketch, witch you can find in the sources. But then I figured out how to set up Tasmota to work with this Board and Motor. The workaround is: Tasmota [https://github.com/arendst/Tasmota] (I use Version 7.1) controls 2 Relais - on for Opening and one for Closing the tap. The downside is, you will have to use two buttoms or configure node-red with a function to control the state and switch between the states. 
 
-Todo: update mill and drill files, mill, solder and test the layout. Release to public
+Todo: Remove cupper under the antenna! update mill and drill files, mill, solder and test the layout. Release to public
