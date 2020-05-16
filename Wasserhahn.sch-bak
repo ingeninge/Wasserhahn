@@ -49,23 +49,23 @@ $EndComp
 $Comp
 L Device:R R5
 U 1 1 5EA0A2EA
-P 4700 1950
-F 0 "R5" H 4770 1996 50  0000 L CNN
-F 1 "10K" H 4770 1905 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 4630 1950 50  0001 C CNN
-F 3 "~" H 4700 1950 50  0001 C CNN
-	1    4700 1950
+P 4850 1600
+F 0 "R5" H 4920 1646 50  0000 L CNN
+F 1 "10K" H 4920 1555 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 4780 1600 50  0001 C CNN
+F 3 "~" H 4850 1600 50  0001 C CNN
+	1    4850 1600
 	1    0    0    -1  
 $EndComp
 $Comp
 L Device:R R6
 U 1 1 5EA0A543
-P 5000 1950
-F 0 "R6" H 5070 1996 50  0000 L CNN
-F 1 "10K" H 5070 1905 50  0000 L CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 4930 1950 50  0001 C CNN
-F 3 "~" H 5000 1950 50  0001 C CNN
-	1    5000 1950
+P 5400 1600
+F 0 "R6" H 5470 1646 50  0000 L CNN
+F 1 "10K" H 5470 1555 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 5330 1600 50  0001 C CNN
+F 3 "~" H 5400 1600 50  0001 C CNN
+	1    5400 1600
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -164,8 +164,6 @@ Wire Wire Line
 	2150 3500 2750 3500
 Connection ~ 2750 3500
 Wire Wire Line
-	2750 2600 3450 2600
-Wire Wire Line
 	2150 2550 2150 2300
 Wire Wire Line
 	2150 2300 3950 2300
@@ -213,24 +211,14 @@ Wire Wire Line
 Wire Wire Line
 	5550 2300 3950 2300
 Wire Wire Line
-	3950 1200 4700 1200
-Wire Wire Line
-	4700 1200 4700 1800
+	3950 1200 4550 1200
 Connection ~ 3950 1200
-Wire Wire Line
-	5000 1800 5000 1200
-Wire Wire Line
-	5000 1200 4700 1200
-Connection ~ 4700 1200
 Wire Wire Line
 	4700 2700 4450 2700
 Wire Wire Line
-	5000 2100 5000 2200
-Wire Wire Line
 	5000 2800 4450 2800
 Wire Wire Line
-	2750 1950 2750 2600
-Connection ~ 2750 2600
+	2750 1950 2750 2100
 Wire Wire Line
 	2750 1650 2750 1200
 Connection ~ 2750 1200
@@ -284,15 +272,11 @@ Connection ~ 8800 3500
 Wire Wire Line
 	8800 3500 9100 3500
 Wire Wire Line
-	9100 2200 5000 2200
-Connection ~ 5000 2200
+	9100 2200 5400 2200
 Wire Wire Line
 	5000 2200 5000 2800
 Wire Wire Line
-	9100 2400 4700 2400
-Wire Wire Line
-	4700 2100 4700 2400
-Connection ~ 4700 2400
+	9100 2400 4850 2400
 Wire Wire Line
 	4700 2400 4700 2700
 $Comp
@@ -318,8 +302,6 @@ Connection ~ 8000 3500
 Wire Wire Line
 	8000 3500 8800 3500
 Wire Wire Line
-	8000 1000 5900 1000
-Wire Wire Line
 	4700 1000 4700 1200
 Wire Wire Line
 	1650 1500 1850 1500
@@ -330,21 +312,20 @@ GND
 $Comp
 L Device:R R2
 U 1 1 5EAA2734
-P 2500 2500
-F 0 "R2" V 2600 2500 50  0000 C CNN
-F 1 "220" V 2384 2500 50  0000 C CNN
-F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 2430 2500 50  0001 C CNN
-F 3 "~" H 2500 2500 50  0001 C CNN
-	1    2500 2500
+P 3050 2600
+F 0 "R2" V 3150 2600 50  0000 C CNN
+F 1 "220" V 2934 2600 50  0000 C CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 2980 2600 50  0001 C CNN
+F 3 "~" H 3050 2600 50  0001 C CNN
+	1    3050 2600
 	0    1    1    0   
 $EndComp
 Wire Wire Line
 	5900 1450 5900 1000
 Wire Wire Line
 	1850 1500 1850 3500
-Connection ~ 5900 1000
 Wire Wire Line
-	5900 1000 4700 1000
+	5900 1000 5400 1000
 Wire Wire Line
 	4450 2500 5150 2500
 Wire Wire Line
@@ -355,21 +336,12 @@ Connection ~ 2000 1200
 Wire Wire Line
 	2000 1200 2750 1200
 Wire Wire Line
-	2750 1200 3950 1200
+	2750 1200 3100 1200
 Connection ~ 2000 3500
 Wire Wire Line
 	2000 3500 2150 3500
 Wire Wire Line
 	2750 3500 3950 3500
-Wire Wire Line
-	2000 1950 2000 2100
-Wire Wire Line
-	2650 2500 3450 2500
-Wire Wire Line
-	2350 2500 2000 2500
-Connection ~ 2000 2500
-Wire Wire Line
-	2000 2500 2000 2850
 Wire Wire Line
 	6650 2000 6650 2100
 Wire Wire Line
@@ -378,17 +350,6 @@ Connection ~ 6650 2100
 Connection ~ 6650 3500
 Wire Wire Line
 	6650 3500 8000 3500
-Wire Wire Line
-	6150 2100 5000 2100
-Connection ~ 2000 2100
-Wire Wire Line
-	2000 2100 2000 2500
-Connection ~ 4700 2100
-Wire Wire Line
-	4700 2100 2000 2100
-Connection ~ 5000 2100
-Wire Wire Line
-	5000 2100 4700 2100
 Wire Wire Line
 	6150 2000 5900 2000
 Connection ~ 5900 2000
@@ -402,4 +363,100 @@ Text Label 5100 2900 0    50   ~ 0
 Output_Open
 Text Label 5100 3000 0    50   ~ 0
 Output_Close
+Wire Wire Line
+	4850 1750 4850 2400
+Connection ~ 4850 2400
+Wire Wire Line
+	4850 2400 4700 2400
+Wire Wire Line
+	4850 1450 4850 1000
+Connection ~ 4850 1000
+Wire Wire Line
+	4850 1000 4700 1000
+Wire Wire Line
+	5400 1450 5400 1000
+Connection ~ 5400 1000
+Wire Wire Line
+	5400 1000 4850 1000
+Wire Wire Line
+	5400 1750 5400 2200
+Connection ~ 5400 2200
+Wire Wire Line
+	5400 2200 5000 2200
+Wire Wire Line
+	6150 2100 2750 2100
+Connection ~ 2750 2100
+Wire Wire Line
+	2750 2100 2750 2500
+Wire Wire Line
+	2000 1950 2000 2850
+Wire Wire Line
+	3450 2600 3200 2600
+Wire Wire Line
+	2900 2600 2900 2500
+Wire Wire Line
+	2900 2500 2750 2500
+Connection ~ 2750 2500
+Wire Wire Line
+	2750 2500 2750 2600
+$Comp
+L Device:R R9
+U 1 1 5EC1253C
+P 3100 1800
+F 0 "R9" H 3170 1846 50  0000 L CNN
+F 1 "10K" H 3170 1755 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 3030 1800 50  0001 C CNN
+F 3 "~" H 3100 1800 50  0001 C CNN
+	1    3100 1800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3450 2500 3100 2500
+Wire Wire Line
+	3100 2500 3100 1950
+Wire Wire Line
+	3100 1650 3100 1200
+Connection ~ 3100 1200
+Wire Wire Line
+	3100 1200 3950 1200
+$Comp
+L Device:R R8
+U 1 1 5EC16764
+P 4550 1600
+F 0 "R8" H 4620 1646 50  0000 L CNN
+F 1 "10K" H 4620 1555 50  0000 L CNN
+F 2 "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal" V 4480 1600 50  0001 C CNN
+F 3 "~" H 4550 1600 50  0001 C CNN
+	1    4550 1600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4450 2600 4550 2600
+Wire Wire Line
+	4550 2600 4550 1750
+Wire Wire Line
+	4550 1450 4550 1200
+Connection ~ 4550 1200
+Wire Wire Line
+	4550 1200 4700 1200
+$Comp
+L Connector_Generic:Conn_01x02 J6
+U 1 1 5EC1D020
+P 7500 1300
+F 0 "J6" V 7372 1380 50  0000 L CNN
+F 1 "Open to flash" V 7463 1380 50  0000 L CNN
+F 2 "" H 7500 1300 50  0001 C CNN
+F 3 "~" H 7500 1300 50  0001 C CNN
+	1    7500 1300
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	8000 1000 7500 1000
+Wire Wire Line
+	7500 1000 7500 1100
+Wire Wire Line
+	7400 1100 7400 1000
+Wire Wire Line
+	7400 1000 5900 1000
+Connection ~ 5900 1000
 $EndSCHEMATC
