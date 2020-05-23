@@ -128,7 +128,7 @@ L Connector_Generic:Conn_02x02_Odd_Even J5
 U 1 1 5EA0C29C
 P 6350 2000
 F 0 "J5" H 6400 2217 50  0000 C CNN
-F 1 "Boot/PRGM" H 6400 2126 50  0000 C CNN
+F 1 "RST/PRGM" H 6400 2126 50  0000 C CNN
 F 2 "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" H 6350 2000 50  0001 C CNN
 F 3 "~" H 6350 2000 50  0001 C CNN
 	1    6350 2000
@@ -204,7 +204,7 @@ Wire Wire Line
 Wire Wire Line
 	5550 3100 5550 3500
 Wire Wire Line
-	5550 3500 3950 3500
+	5550 3500 4750 3500
 Connection ~ 3950 3500
 Wire Wire Line
 	5550 2800 5550 2300
@@ -439,24 +439,27 @@ Wire Wire Line
 Connection ~ 4550 1200
 Wire Wire Line
 	4550 1200 4700 1200
+Connection ~ 5900 1000
+Wire Wire Line
+	4450 3200 4750 3200
+Wire Wire Line
+	4750 3200 4750 3500
+Connection ~ 4750 3500
+Wire Wire Line
+	4750 3500 3950 3500
 $Comp
-L Connector_Generic:Conn_01x02 J6
-U 1 1 5EC1D020
-P 7500 1300
-F 0 "J6" V 7372 1380 50  0000 L CNN
-F 1 "Open to flash" V 7463 1380 50  0000 L CNN
-F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Horizontal" H 7500 1300 50  0001 C CNN
-F 3 "~" H 7500 1300 50  0001 C CNN
-	1    7500 1300
-	0    1    1    0   
+L Connector_Generic:Conn_02x02_Odd_Even J6
+U 1 1 5EC5C94F
+P 7450 1000
+F 0 "J6" H 7500 1217 50  0000 C CNN
+F 1 "Isolate" H 7500 1126 50  0000 C CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_2x02_P2.54mm_Vertical" H 7450 1000 50  0001 C CNN
+F 3 "~" H 7450 1000 50  0001 C CNN
+	1    7450 1000
+	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	8000 1000 7500 1000
+	7750 1000 8000 1000
 Wire Wire Line
-	7500 1000 7500 1100
-Wire Wire Line
-	7400 1100 7400 1000
-Wire Wire Line
-	7400 1000 5900 1000
-Connection ~ 5900 1000
+	5900 1000 7250 1000
 $EndSCHEMATC
