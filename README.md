@@ -1,4 +1,7 @@
 # Wasserhahn
+
+ATTENTION! This repository is only for testing! No production, and never will be.
+
 MQTT controlled Motor Bulb Valve ESP8266 Arduino
 ![Image of the motor driver](https://github.com/ingeninge/Wasserhahn/blob/master/images/20190403_160802.jpg)
 Manufactor is END. Here is a link to the Datasheet: https://shop.end.de/armaturen/antriebe-und-zubehoer/elektrische-antriebe/ne034100-elektrischer-schwenkantrieb-30nm-230v-ac
