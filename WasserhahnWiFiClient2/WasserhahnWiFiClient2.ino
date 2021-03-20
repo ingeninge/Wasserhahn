@@ -32,7 +32,7 @@ Usage:  mosquitto_pub -h your.mqtt.broker.ip -t wasserhahn/set -m Status // retu
   #include "credentials.h"
 #endif
 
-// WiFi Settings
+// WiFi Settings if not using credentials.h
 #ifndef STASSID
 //#define STASSID "YourSSID"
 //#define STAPSK  "YourSecretKey"
@@ -42,7 +42,7 @@ const char* password = STAPSK;
 
 
 // MQTT Broker Settings
-//char* server = "your.mqtt.broker.ip";
+//const char* server = "your.mqtt.broker.ip";
 const char* server = "192.168.2.78";
 const uint16_t port = 1883;
 // change this to the mqtt topic you want to use:
