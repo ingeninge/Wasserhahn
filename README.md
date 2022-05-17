@@ -16,3 +16,5 @@ The Outputs are controlling two relays. One for opening and one for closing the 
 First idea was to let it work with an Arduino Sketch, witch you can find in the sources. But then I figured out how to set up Tasmota to work with this Board and Motor. The workaround is: Tasmota [https://github.com/arendst/Tasmota] (I use Version 7.1) controls 2 relays - one for Opening and one for Closing the tap. The downside is, you will have to use two buttons or configure node-red with a function to control the state and switch between the states.<br>
 For Programming see https://www.forward.com.au/pfod/ESP8266/GPIOpins/index.html GPIO0 and RST are on Jumper J5. GPIO2 is permanently pulled up via R8.
 Todo: Remove copper under the antenna! Enable access to GPIO15 for programming mode or pull low permanent. update mill and drill files, mill, solder and test the layout. Release to public
+
+The settings for Tasmota can be found in the Wiki https://github.com/ingeninge/Wasserhahn/wiki
