@@ -18,3 +18,5 @@ For Programming see https://www.forward.com.au/pfod/ESP8266/GPIOpins/index.html 
 Todo: Remove copper under the antenna! Enable access to GPIO15 for programming mode or pull low permanent. update mill and drill files, mill, solder and test the layout. Release to public
 
 The settings for Tasmota can be found in the Wiki https://github.com/ingeninge/Wasserhahn/wiki
+
+BTW: I can control the bulb valve with a remote control in the garden, so I don't have to pull out my mobile to open the tap. [Remote control for Wasserhahn](https://github.com/ingeninge/ESP-Watertap-Remote)
